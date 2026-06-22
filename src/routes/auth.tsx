@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth, CCN_LOCATIONS } from "@/lib/store";
+import { useAuth } from "@/lib/store";
+import { useLocations } from "@/lib/data-stores";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const navigate = useNavigate();
   const { login, signup } = useAuth();
+  const { publicLocations } = useLocations();
 
   const [loginEmail, setLoginEmail] = useState("admin@ccn.org");
   const [loginPassword, setLoginPassword] = useState("admin123");
@@ -144,7 +146,7 @@ function AuthPage() {
                     onValueChange={(v) => setSignupForm({ ...signupForm, primaryLocationId: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent className="max-h-72">
-                      {CCN_LOCATIONS.map((l) => (
+                      {publicLocations.map((l) => (
                         <SelectItem key={l.id} value={l.id}>
                           {l.flag} {l.city} — <span className="text-muted-foreground">{l.country}</span>
                         </SelectItem>
