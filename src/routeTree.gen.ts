@@ -14,10 +14,13 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppSponsorsRouteImport } from './routes/_app.sponsors'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppResourcesRouteImport } from './routes/_app.resources'
+import { Route as AppMembershipRouteImport } from './routes/_app.membership'
 import { Route as AppMembersRouteImport } from './routes/_app.members'
 import { Route as AppFilmsRouteImport } from './routes/_app.films'
 import { Route as AppEventsRouteImport } from './routes/_app.events'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppCommunicationsRouteImport } from './routes/_app.communications'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -43,6 +46,16 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppResourcesRoute = AppResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMembershipRoute = AppMembershipRouteImport.update({
+  id: '/membership',
+  path: '/membership',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMembersRoute = AppMembersRouteImport.update({
   id: '/members',
   path: '/members',
@@ -63,24 +76,35 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCommunicationsRoute = AppCommunicationsRouteImport.update({
+  id: '/communications',
+  path: '/communications',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/communications': typeof AppCommunicationsRoute
   '/dashboard': typeof AppDashboardRoute
   '/events': typeof AppEventsRoute
   '/films': typeof AppFilmsRoute
   '/members': typeof AppMembersRoute
+  '/membership': typeof AppMembershipRoute
+  '/resources': typeof AppResourcesRoute
   '/settings': typeof AppSettingsRoute
   '/sponsors': typeof AppSponsorsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/communications': typeof AppCommunicationsRoute
   '/dashboard': typeof AppDashboardRoute
   '/events': typeof AppEventsRoute
   '/films': typeof AppFilmsRoute
   '/members': typeof AppMembersRoute
+  '/membership': typeof AppMembershipRoute
+  '/resources': typeof AppResourcesRoute
   '/settings': typeof AppSettingsRoute
   '/sponsors': typeof AppSponsorsRoute
 }
@@ -89,10 +113,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_app/communications': typeof AppCommunicationsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/events': typeof AppEventsRoute
   '/_app/films': typeof AppFilmsRoute
   '/_app/members': typeof AppMembersRoute
+  '/_app/membership': typeof AppMembershipRoute
+  '/_app/resources': typeof AppResourcesRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/sponsors': typeof AppSponsorsRoute
 }
@@ -101,20 +128,26 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/communications'
     | '/dashboard'
     | '/events'
     | '/films'
     | '/members'
+    | '/membership'
+    | '/resources'
     | '/settings'
     | '/sponsors'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/communications'
     | '/dashboard'
     | '/events'
     | '/films'
     | '/members'
+    | '/membership'
+    | '/resources'
     | '/settings'
     | '/sponsors'
   id:
@@ -122,10 +155,13 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/auth'
+    | '/_app/communications'
     | '/_app/dashboard'
     | '/_app/events'
     | '/_app/films'
     | '/_app/members'
+    | '/_app/membership'
+    | '/_app/resources'
     | '/_app/settings'
     | '/_app/sponsors'
   fileRoutesById: FileRoutesById
@@ -173,6 +209,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/resources': {
+      id: '/_app/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof AppResourcesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/membership': {
+      id: '/_app/membership'
+      path: '/membership'
+      fullPath: '/membership'
+      preLoaderRoute: typeof AppMembershipRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/members': {
       id: '/_app/members'
       path: '/members'
@@ -201,23 +251,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/communications': {
+      id: '/_app/communications'
+      path: '/communications'
+      fullPath: '/communications'
+      preLoaderRoute: typeof AppCommunicationsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppCommunicationsRoute: typeof AppCommunicationsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppEventsRoute: typeof AppEventsRoute
   AppFilmsRoute: typeof AppFilmsRoute
   AppMembersRoute: typeof AppMembersRoute
+  AppMembershipRoute: typeof AppMembershipRoute
+  AppResourcesRoute: typeof AppResourcesRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppSponsorsRoute: typeof AppSponsorsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCommunicationsRoute: AppCommunicationsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppEventsRoute: AppEventsRoute,
   AppFilmsRoute: AppFilmsRoute,
   AppMembersRoute: AppMembersRoute,
+  AppMembershipRoute: AppMembershipRoute,
+  AppResourcesRoute: AppResourcesRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppSponsorsRoute: AppSponsorsRoute,
 }
