@@ -212,7 +212,7 @@ function EventsCardsPage({ mode }: { mode: "admin" | "member" }) {
         onClose={() => { setCreating(false); setEditing(null); }}
         onSave={(data) => {
           if (editing) { update(editing.id, data); toast.success("Event updated"); }
-          else { add(data); toast.success("Event added"); }
+          else { add(data as Omit<EventRecord, "id">); toast.success("Event added"); }
           setCreating(false); setEditing(null);
         }}
       />
