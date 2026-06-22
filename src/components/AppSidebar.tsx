@@ -27,29 +27,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const ADMIN_NAV = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/members", label: "Members", icon: Users },
-  { to: "/sponsors", label: "Sponsors", icon: Handshake },
-  { to: "/films", label: "Submitted Films", icon: Film },
-  { to: "/events", label: "Events", icon: Calendar },
-  { to: "/settings", label: "Settings", icon: Settings },
-] as const;
+import { usePermissions, type ModuleKey } from "@/lib/data-stores";
 
-const MEMBER_NAV = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/settings", label: "My Profile", icon: User },
-  { to: "/films", label: "My Submissions", icon: Film },
-  { to: "/events", label: "My Events", icon: Calendar },
-  { to: "/communications", label: "My Communications", icon: Megaphone },
-  { to: "/membership", label: "My Membership", icon: BadgeCheck },
-  { to: "/resources", label: "Resources", icon: BookOpen },
-] as const;
+const ADMIN_NAV: { to: string; label: string; icon: typeof LayoutDashboard; mod: ModuleKey }[] = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, mod: "dashboard" },
+  { to: "/members", label: "Members", icon: Users, mod: "members" },
+  { to: "/sponsors", label: "Sponsors", icon: Handshake, mod: "sponsors" },
+  { to: "/films", label: "Submitted Films", icon: Film, mod: "films" },
+  { to: "/events", label: "Events", icon: Calendar, mod: "events" },
+  { to: "/settings", label: "Settings", icon: Settings, mod: "settings" },
+];
+
+const MEMBER_NAV: { to: string; label: string; icon: typeof LayoutDashboard; mod: ModuleKey }[] = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, mod: "dashboard" },
+  { to: "/settings", label: "My Profile", icon: User, mod: "settings" },
+  { to: "/films", label: "My Submissions", icon: Film, mod: "films" },
+  { to: "/events", label: "My Events", icon: Calendar, mod: "events" },
+  { to: "/communications", label: "My Communications", icon: Megaphone, mod: "communications" },
+  { to: "/membership", label: "My Membership", icon: BadgeCheck, mod: "membership" },
+  { to: "/resources", label: "Resources", icon: BookOpen, mod: "resources" },
+];
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user, activeLocationId, setActiveLocation } = useAuth();
   const { locations, getById } = useLocations();
+  const { perms } = usePermissions();
   if (!user) return null;
 
   const isAdmin = user.role === "admin";
@@ -108,7 +111,9 @@ export function AppSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {(isAdmin ? ADMIN_NAV : MEMBER_NAV).map(({ to, label, icon: Icon }) => {
+        {(isAdmin ? ADMIN_NAV : MEMBER_NAV)
+          .filter((n) => perms[user.role][n.mod])
+          .map(({ to, label, icon: Icon }) => {
           const active = pathname === to || pathname.startsWith(to + "/");
           return (
             <Link
