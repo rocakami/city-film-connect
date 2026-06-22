@@ -5,7 +5,8 @@ import {
 } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
 import { useAuth } from "@/lib/store";
-import { FILMS, EVENTS } from "@/lib/mock-data";
+import { FILMS } from "@/lib/mock-data";
+import { useEventsStore } from "@/lib/data-stores";
 import { useEventRegistrations } from "@/lib/registrations";
 
 export function MemberDashboard() {
@@ -17,7 +18,8 @@ export function MemberDashboard() {
   const pending = myFilms.filter((f) => f.status === "Under Review").length;
 
   const { regs, isRegistered } = useEventRegistrations(user.id);
-  const upcoming = EVENTS.filter((e) => e.status === "Upcoming");
+  const { events } = useEventsStore();
+  const upcoming = events.filter((e) => e.status === "Upcoming");
   const myUpcoming = upcoming.filter((e) => regs.has(e.id));
   const recent = myFilms[0];
 
