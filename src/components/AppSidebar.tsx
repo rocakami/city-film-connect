@@ -127,13 +127,6 @@ export function AppSidebar() {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="m-4 rounded-2xl bg-sidebar-border/40 p-4 text-sm">
-        <p className="font-semibold leading-tight">Global unity through storytelling.</p>
-        <p className="mt-2 text-xs text-sidebar-muted leading-relaxed">
-          Film. Technology. The Human Voice.
-        </p>
-      </div>
     </aside>
   );
 }
