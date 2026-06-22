@@ -9,6 +9,10 @@ import {
   ChevronDown,
   Check,
   MapPin,
+  User,
+  Megaphone,
+  BadgeCheck,
+  BookOpen,
 } from "lucide-react";
 import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
 import { useAuth, CCN_LOCATIONS } from "@/lib/store";
@@ -22,13 +26,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const NAV = [
+const ADMIN_NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/members", label: "Members", icon: Users },
   { to: "/sponsors", label: "Sponsors", icon: Handshake },
   { to: "/films", label: "Submitted Films", icon: Film },
   { to: "/events", label: "Events", icon: Calendar },
   { to: "/settings", label: "Settings", icon: Settings },
+] as const;
+
+const MEMBER_NAV = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/settings", label: "My Profile", icon: User },
+  { to: "/films", label: "My Submissions", icon: Film },
+  { to: "/events", label: "My Events", icon: Calendar },
+  { to: "/communications", label: "My Communications", icon: Megaphone },
+  { to: "/membership", label: "My Membership", icon: BadgeCheck },
+  { to: "/resources", label: "Resources", icon: BookOpen },
 ] as const;
 
 export function AppSidebar() {
@@ -98,7 +112,7 @@ export function AppSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV.map(({ to, label, icon: Icon }) => {
+        {(isAdmin ? ADMIN_NAV : MEMBER_NAV).map(({ to, label, icon: Icon }) => {
           const active = pathname === to || pathname.startsWith(to + "/");
           return (
             <Link
