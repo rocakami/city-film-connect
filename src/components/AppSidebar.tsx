@@ -15,8 +15,9 @@ import {
   BookOpen,
 } from "lucide-react";
 import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
-import { useAuth, CCN_LOCATIONS } from "@/lib/store";
-import { getLocationById } from "@/lib/locations";
+import { useAuth } from "@/lib/store";
+import { useLocations } from "@/lib/data-stores";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,46 +27,44 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const ADMIN_NAV = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/members", label: "Members", icon: Users },
-  { to: "/sponsors", label: "Sponsors", icon: Handshake },
-  { to: "/films", label: "Submitted Films", icon: Film },
-  { to: "/events", label: "Events", icon: Calendar },
-  { to: "/settings", label: "Settings", icon: Settings },
-] as const;
+import { usePermissions, type ModuleKey } from "@/lib/data-stores";
 
-const MEMBER_NAV = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/settings", label: "My Profile", icon: User },
-  { to: "/films", label: "My Submissions", icon: Film },
-  { to: "/events", label: "My Events", icon: Calendar },
-  { to: "/communications", label: "My Communications", icon: Megaphone },
-  { to: "/membership", label: "My Membership", icon: BadgeCheck },
-  { to: "/resources", label: "Resources", icon: BookOpen },
-] as const;
+const ADMIN_NAV: { to: string; label: string; icon: typeof LayoutDashboard; mod: ModuleKey }[] = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, mod: "dashboard" },
+  { to: "/members", label: "Members", icon: Users, mod: "members" },
+  { to: "/sponsors", label: "Sponsors", icon: Handshake, mod: "sponsors" },
+  { to: "/films", label: "Submitted Films", icon: Film, mod: "films" },
+  { to: "/events", label: "Events", icon: Calendar, mod: "events" },
+  { to: "/settings", label: "Settings", icon: Settings, mod: "settings" },
+];
+
+const MEMBER_NAV: { to: string; label: string; icon: typeof LayoutDashboard; mod: ModuleKey }[] = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, mod: "dashboard" },
+  { to: "/settings", label: "My Profile", icon: User, mod: "settings" },
+  { to: "/films", label: "My Submissions", icon: Film, mod: "films" },
+  { to: "/events", label: "My Events", icon: Calendar, mod: "events" },
+  { to: "/communications", label: "My Communications", icon: Megaphone, mod: "communications" },
+  { to: "/membership", label: "My Membership", icon: BadgeCheck, mod: "membership" },
+  { to: "/resources", label: "Resources", icon: BookOpen, mod: "resources" },
+];
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user, activeLocationId, setActiveLocation } = useAuth();
+  const { locations, getById } = useLocations();
+  const { perms } = usePermissions();
   if (!user) return null;
 
   const isAdmin = user.role === "admin";
-  const activeLoc =
-    activeLocationId === "all" ? null : getLocationById(activeLocationId);
+  const activeLoc = activeLocationId === "all" ? null : getById(activeLocationId);
 
   return (
     <aside className="w-64 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col min-h-screen sticky top-0">
       {/* Brand */}
-      <div className="px-6 pt-6 pb-4 flex flex-col items-center text-center border-b border-sidebar-border">
-        <img src={logoAsset.url} alt="Cinema Cities Network" className="size-20 object-contain" width={80} height={80} />
-        <p className="mt-2 text-[10px] tracking-[0.18em] text-sidebar-muted font-medium uppercase">
-          Global Unity Through Storytelling
-        </p>
-        <p className="text-[10px] tracking-[0.18em] text-primary mt-0.5 font-semibold uppercase">
-          Film. Technology. Human Voice.
-        </p>
+      <div className="px-6 pt-6 pb-5 flex flex-col items-center text-center border-b border-sidebar-border">
+        <img src={logoAsset.url} alt="Cinema Cities Network" className="w-full max-w-[180px] object-contain" />
       </div>
+
 
       {/* Location switcher */}
       <div className="px-4 pt-4">
@@ -91,8 +90,8 @@ export function AppSidebar() {
               </>
             )}
             <DropdownMenuLabel>CCN Locations</DropdownMenuLabel>
-            {CCN_LOCATIONS.map((l) => {
-              const allowed = isAdmin || l.id === user.primaryLocationId || true; // members can switch but data is location-scoped
+            {locations.map((l) => {
+              const allowed = isAdmin || l.id === user.primaryLocationId || true;
               return (
                 <DropdownMenuItem
                   key={l.id}
@@ -112,7 +111,9 @@ export function AppSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {(isAdmin ? ADMIN_NAV : MEMBER_NAV).map(({ to, label, icon: Icon }) => {
+        {(isAdmin ? ADMIN_NAV : MEMBER_NAV)
+          .filter((n) => perms[user.role][n.mod])
+          .map(({ to, label, icon: Icon }) => {
           const active = pathname === to || pathname.startsWith(to + "/");
           return (
             <Link
@@ -131,13 +132,6 @@ export function AppSidebar() {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="m-4 rounded-2xl bg-sidebar-border/40 p-4 text-sm">
-        <p className="font-semibold leading-tight">Global unity through storytelling.</p>
-        <p className="mt-2 text-xs text-sidebar-muted leading-relaxed">
-          Film. Technology. The Human Voice.
-        </p>
-      </div>
     </aside>
   );
 }
