@@ -16,10 +16,11 @@ interface Props {
   value: string | number;
   icon: LucideIcon;
   tone: Tone;
+  caption?: string;
   delta?: { value: string; direction: "up" | "down"; label?: string };
 }
 
-export function StatCard({ label, value, icon: Icon, tone, delta }: Props) {
+export function StatCard({ label, value, icon: Icon, tone, caption, delta }: Props) {
   return (
     <div className="rounded-2xl bg-card border border-border p-5 shadow-sm">
       <div className="flex items-start gap-4">
@@ -29,6 +30,7 @@ export function StatCard({ label, value, icon: Icon, tone, delta }: Props) {
         <div className="min-w-0 flex-1">
           <p className="text-sm text-muted-foreground">{label}</p>
           <p className="mt-1 text-3xl font-bold tracking-tight text-foreground">{value}</p>
+          {caption && <p className="text-xs text-muted-foreground mt-0.5">{caption}</p>}
           {delta && (
             <p className="mt-2 flex items-center gap-1.5 text-xs">
               {delta.direction === "up" ? (

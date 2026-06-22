@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Calendar, CalendarCheck, Users, Ticket, DollarSign, Download, Plus, Search, Filter,
-  Eye, Pencil, MoreVertical,
+  Eye, Pencil, MoreVertical, MapPin, Check, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
@@ -11,14 +11,203 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useActiveLocation, filterByLocation, useAuth } from "@/lib/store";
 import { EVENTS, EVENT_CATEGORIES, type CCNEvent } from "@/lib/mock-data";
-import { getLocationById } from "@/lib/locations";
-import { CCN_LOCATIONS } from "@/lib/locations";
+import { getLocationById, CCN_LOCATIONS } from "@/lib/locations";
+import { useEventRegistrations } from "@/lib/registrations";
 
 export const Route = createFileRoute("/_app/events")({
-  component: EventsPage,
+  component: EventsRoute,
 });
 
-function EventsPage() {
+function EventsRoute() {
+  const { user } = useAuth();
+  if (user?.role === "member") return <MemberEventsPage />;
+  return <AdminEventsPage />;
+}
+
+/* ──────────────────────── Member view (image 2) ──────────────────────── */
+
+function MemberEventsPage() {
+  const { user } = useAuth();
+  const { toggle, isRegistered } = useEventRegistrations(user?.id);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
+  const [location, setLocation] = useState("all");
+
+  const all = EVENTS;
+  const filtered = all.filter((e) => {
+    if (category !== "all" && e.category !== category) return false;
+    if (location !== "all" && e.locationId !== location) return false;
+    if (search && !`${e.name} ${e.venue} ${e.city}`.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  const upcoming = all.filter((e) => e.status === "Upcoming");
+  const myRegs = upcoming.filter((e) => isRegistered(e.id)).length;
+  const cities = new Set(all.map((e) => e.city)).size;
+
+  return (
+    <>
+      <PageHeader
+        title="Events"
+        subtitle="Discover and register for events hosted by Cinema Cities Network."
+      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Upcoming Events" value={upcoming.length} caption={`Registered for ${myRegs}`} icon={Calendar} tone="blue" />
+        <StatCard label="Events Registered" value={myRegs} caption="View My Registrations" icon={Users} tone="green" />
+        <StatCard label="Tickets" value={myRegs} caption="View My Tickets" icon={Ticket} tone="amber" />
+        <StatCard label="Cities" value={cities} caption="Events this year" icon={MapPin} tone="violet" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+        <div className="bg-card border border-border rounded-2xl">
+          <div className="p-5 border-b border-border">
+            <p className="text-lg font-semibold">All Events</p>
+          </div>
+          <div className="p-4 flex flex-wrap items-center gap-3 border-b border-border">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <Input className="pl-9" placeholder="Search events…" value={search} onChange={(e) => setSearch(e.target.value)} />
+            </div>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="w-[170px]"><SelectValue placeholder="All Categories" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {EVENT_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={location} onValueChange={setLocation}>
+              <SelectTrigger className="w-[160px]"><SelectValue placeholder="All Locations" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Locations</SelectItem>
+                {CCN_LOCATIONS.map((l) => <SelectItem key={l.id} value={l.id}>{l.flag} {l.city}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Button variant="outline"><Filter className="size-4 mr-2" /> Filter</Button>
+          </div>
+
+          <ul className="divide-y divide-border">
+            {filtered.map((e) => (
+              <li key={e.id} className="p-5 flex flex-col md:flex-row gap-5">
+                <div className="w-full md:w-44 h-32 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 grid place-items-center text-white text-xs font-bold shrink-0">
+                  {e.city}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-700 mb-1.5">
+                    {e.category}
+                  </span>
+                  <p className="text-lg font-bold">{e.name}</p>
+                  <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
+                    <Calendar className="size-4" /> {e.date}
+                  </p>
+                  <p className="text-sm text-muted-foreground flex items-center gap-2">
+                    <MapPin className="size-4" /> {e.venue}, {e.city}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2 md:w-44 shrink-0">
+                  {isRegistered(e.id) ? (
+                    <span className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-md bg-emerald-100 text-emerald-700">
+                      <Check className="size-3.5" /> Registered
+                    </span>
+                  ) : e.status === "Upcoming" ? (
+                    <Button onClick={() => toggle(e.id)}>
+                      <Ticket className="size-4 mr-2" /> Register
+                    </Button>
+                  ) : (
+                    <span className="text-xs font-semibold px-3 py-2 rounded-md bg-secondary text-muted-foreground text-center">
+                      {e.status}
+                    </span>
+                  )}
+                  <Button variant="outline" size="sm">
+                    View Details <ChevronRight className="size-3.5 ml-1" />
+                  </Button>
+                </div>
+              </li>
+            ))}
+            {filtered.length === 0 && (
+              <li className="py-12 text-center text-sm text-muted-foreground">No events match.</li>
+            )}
+          </ul>
+        </div>
+
+        <aside className="space-y-6">
+          <div className="bg-card border border-border rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="font-semibold">Upcoming Events</p>
+              <span className="text-xs font-semibold text-primary">View All</span>
+            </div>
+            <ul className="space-y-3">
+              {upcoming.slice(0, 3).map((e) => (
+                <li key={e.id} className="flex gap-3">
+                  <div className="text-center w-10 shrink-0">
+                    <p className="text-[10px] font-bold text-rose-500">{e.date.slice(0, 3).toUpperCase()}</p>
+                    <p className="text-lg font-bold leading-none">{e.date.match(/\d+/)?.[0]}</p>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold truncate">{e.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{e.city}</p>
+                    <p className="text-xs text-muted-foreground">{e.date}</p>
+                    <p className={`mt-1 text-[10px] font-semibold ${isRegistered(e.id) ? "text-emerald-600" : "text-amber-600"}`}>
+                      {isRegistered(e.id) ? "✓ Registered" : "○ Open"}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <MiniCalendar registeredCount={myRegs} />
+
+          <div className="rounded-2xl bg-slate-900 text-white p-5">
+            <p className="font-semibold">Don't Miss Out!</p>
+            <p className="text-sm text-white/70 mt-1">
+              New events are added regularly. Check back often and be part of the global storytelling community.
+            </p>
+            <button className="mt-3 px-3 py-2 rounded-md bg-white/10 hover:bg-white/20 text-sm font-semibold">
+              Explore Events
+            </button>
+          </div>
+        </aside>
+      </div>
+    </>
+  );
+}
+
+function MiniCalendar({ registeredCount }: { registeredCount: number }) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-5">
+      <div className="flex items-center justify-between mb-3">
+        <button className="size-7 grid place-items-center rounded-md hover:bg-secondary"><ChevronLeft className="size-4" /></button>
+        <p className="font-semibold text-sm">May 2024</p>
+        <button className="size-7 grid place-items-center rounded-md hover:bg-secondary"><ChevronRight className="size-4" /></button>
+      </div>
+      <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-muted-foreground uppercase">
+        {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => <div key={d}>{d}</div>)}
+      </div>
+      <div className="grid grid-cols-7 gap-1 mt-1 text-center text-xs">
+        {Array.from({ length: 35 }).map((_, i) => {
+          const day = i - 2; // start offset
+          const isToday = day === 15;
+          if (day < 1 || day > 31) return <div key={i} className="py-1.5 text-muted-foreground/50">{((day - 1 + 30) % 30) + 1}</div>;
+          return (
+            <div key={i} className={`py-1.5 rounded ${isToday ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-secondary"}`}>
+              {day}
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex items-center justify-between mt-4 text-[10px] text-muted-foreground">
+        <span className="flex items-center gap-1"><span className="size-2 rounded-full bg-primary" /> Registered ({registeredCount})</span>
+        <span className="flex items-center gap-1"><span className="size-2 rounded-full bg-amber-500" /> Pending</span>
+        <span className="flex items-center gap-1"><span className="size-2 rounded-full bg-emerald-500" /> Open</span>
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────────── Admin view ──────────────────────── */
+
+function AdminEventsPage() {
   const { locationId } = useActiveLocation();
   const { user } = useAuth();
   const scoped = filterByLocation(EVENTS, locationId);

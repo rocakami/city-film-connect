@@ -34,6 +34,8 @@ export interface FilmSubmission {
   submittedOn: string;
   status: "Under Review" | "Accepted" | "Rejected" | "Withdrawn";
   locationId: string;
+  submittedBy?: string; // email of member who submitted
+  synopsis?: string;
 }
 
 export interface CCNEvent {
@@ -82,9 +84,9 @@ export const SPONSORS: Sponsor[] = [
 ];
 
 export const FILMS: FilmSubmission[] = [
-  { id: "FILM-1001", title: "City Lights", director: "Emma Johnson", category: "Feature Film", country: "United States", flag: "🇺🇸", submittedOn: "May 30, 2024", status: "Under Review", locationId: "miami" },
-  { id: "FILM-1002", title: "Beyond Borders", director: "Raj Patel", category: "Documentary", country: "India", flag: "🇮🇳", submittedOn: "May 29, 2024", status: "Accepted", locationId: "jakarta" },
-  { id: "FILM-1003", title: "Echoes of Time", director: "Sofia Martinez", category: "Short Film", country: "Spain", flag: "🇪🇸", submittedOn: "May 28, 2024", status: "Under Review", locationId: "pisa" },
+  { id: "FILM-1001", title: "City Lights", director: "Sarah Johnson", category: "Short Film", country: "United States", flag: "🇺🇸", submittedOn: "May 29, 2024", status: "Under Review", locationId: "miami", submittedBy: "member@ccn.org", synopsis: "A story of hope and resilience set in the heart of a bustling metropolis." },
+  { id: "FILM-1002", title: "Beyond Borders", director: "Sarah Johnson", category: "Documentary", country: "United States", flag: "🇺🇸", submittedOn: "May 22, 2024", status: "Accepted", locationId: "miami", submittedBy: "member@ccn.org" },
+  { id: "FILM-1003", title: "Echoes of Time", director: "Sarah Johnson", category: "Short Film", country: "United States", flag: "🇺🇸", submittedOn: "May 10, 2024", status: "Under Review", locationId: "miami", submittedBy: "member@ccn.org" },
   { id: "FILM-1004", title: "The Last Frame", director: "James Lee", category: "Feature Film", country: "Canada", flag: "🇨🇦", submittedOn: "May 27, 2024", status: "Rejected", locationId: "miami" },
   { id: "FILM-1005", title: "Voices Unheard", director: "Aisha Khan", category: "Documentary", country: "United Kingdom", flag: "🇬🇧", submittedOn: "May 26, 2024", status: "Accepted", locationId: "belfast" },
   { id: "FILM-1006", title: "Parallel Roads", director: "Luca Bianchi", category: "Short Film", country: "Italy", flag: "🇮🇹", submittedOn: "May 25, 2024", status: "Under Review", locationId: "pisa" },
