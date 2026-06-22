@@ -10,7 +10,7 @@ import {
   Check,
   MapPin,
 } from "lucide-react";
-import logo from "@/assets/ccn-logo.png";
+import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
 import { useAuth, CCN_LOCATIONS } from "@/lib/store";
 import { getLocationById } from "@/lib/locations";
 import {
