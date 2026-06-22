@@ -6,6 +6,7 @@ import { useAuth, useActiveLocation, filterByLocation } from "@/lib/store";
 import { MEMBERS, SPONSORS, FILMS, EVENTS } from "@/lib/mock-data";
 import { getLocationById } from "@/lib/locations";
 import { Badge } from "@/components/ui/badge";
+import { MemberDashboard } from "@/components/MemberDashboard";
 
 export const Route = createFileRoute("/_app/dashboard")({
   component: Dashboard,
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/_app/dashboard")({
 function Dashboard() {
   const { user } = useAuth();
   const { locationId, location, isAll } = useActiveLocation();
+  if (user?.role === "member") return <MemberDashboard />;
 
   const members = filterByLocation(MEMBERS, locationId);
   const sponsors = filterByLocation(SPONSORS, locationId);

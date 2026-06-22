@@ -9,7 +9,7 @@ import { StatCard } from "@/components/StatCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useActiveLocation, filterByLocation } from "@/lib/store";
+import { useActiveLocation, filterByLocation, useAuth } from "@/lib/store";
 import { FILMS, FILM_CATEGORIES, type FilmSubmission } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/_app/films")({
@@ -18,7 +18,11 @@ export const Route = createFileRoute("/_app/films")({
 
 function FilmsPage() {
   const { locationId } = useActiveLocation();
-  const scoped = filterByLocation(FILMS, locationId);
+  const { user } = useAuth();
+  const base = user?.role === "member"
+    ? FILMS.filter((f) => f.submittedBy === user.email)
+    : FILMS;
+  const scoped = user?.role === "member" ? base : filterByLocation(base, locationId);
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
