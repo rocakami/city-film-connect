@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import logo from "@/assets/ccn-logo.png";
+import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,7 +58,7 @@ function AuthPage() {
       {/* Brand side */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-sidebar text-sidebar-foreground">
         <div className="flex items-center gap-3">
-          <img src={logo} alt="CCN" className="size-12" width={48} height={48} />
+          <img src={logoAsset.url} alt="CCN" className="size-12" width={48} height={48} />
           <div>
             <p className="font-bold">Cinema Cities Network</p>
             <p className="text-[10px] tracking-[0.18em] text-sidebar-muted uppercase">
@@ -83,7 +83,7 @@ function AuthPage() {
       {/* Form side */}
       <div className="flex flex-col justify-center p-8 sm:p-12">
         <div className="lg:hidden mb-6 flex items-center gap-3">
-          <img src={logo} alt="CCN" className="size-10" width={40} height={40} />
+          <img src={logoAsset.url} alt="CCN" className="size-10" width={40} height={40} />
           <p className="font-bold">Cinema Cities Network</p>
         </div>
         <div className="w-full max-w-md mx-auto">

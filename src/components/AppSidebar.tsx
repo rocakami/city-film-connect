@@ -10,7 +10,7 @@ import {
   Check,
   MapPin,
 } from "lucide-react";
-import logo from "@/assets/ccn-logo.png";
+import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
 import { useAuth, CCN_LOCATIONS } from "@/lib/store";
 import { getLocationById } from "@/lib/locations";
 import {
@@ -44,7 +44,7 @@ export function AppSidebar() {
     <aside className="w-64 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col min-h-screen sticky top-0">
       {/* Brand */}
       <div className="px-6 pt-6 pb-4 flex flex-col items-center text-center border-b border-sidebar-border">
-        <img src={logo} alt="Cinema Cities Network" className="size-20 object-contain" width={80} height={80} />
+        <img src={logoAsset.url} alt="Cinema Cities Network" className="size-20 object-contain" width={80} height={80} />
         <p className="mt-2 text-[10px] tracking-[0.18em] text-sidebar-muted font-medium uppercase">
           Global Unity Through Storytelling
         </p>
