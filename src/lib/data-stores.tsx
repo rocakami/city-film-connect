@@ -153,10 +153,15 @@ export function DataStoresProvider({ children }: { children: ReactNode }) {
     add: (e) => {
       const id = e.id ?? `EVT-${Date.now()}`;
       const rec: EventRecord = {
-        registrations: 0, capacity: 100, status: "Upcoming", category: "Film Festival",
+        registrations: 0,
+        capacity: 100,
+        status: "Upcoming",
+        category: "Film Festival",
         date: `${e.startDate ?? ""} – ${e.endDate ?? ""}`,
-        venue: "TBD", city: "TBD",
-        ...e, id,
+        venue: "TBD",
+        city: "TBD",
+        ...(e as Partial<EventRecord>),
+        id,
       } as EventRecord;
       persistEvt([rec, ...events]);
       return rec;
