@@ -45,8 +45,8 @@ function FilmsPage() {
   return (
     <>
       <PageHeader
-        title="Film Submissions"
-        subtitle="Manage and review all film submissions."
+        title={user?.role === "member" ? "My Submissions" : "Film Submissions"}
+        subtitle={user?.role === "member" ? "Track and manage the films you've submitted to CCN." : "Manage and review all film submissions."}
         actions={
           <>
             <Button variant="outline"><Download className="size-4 mr-2" /> Export</Button>
