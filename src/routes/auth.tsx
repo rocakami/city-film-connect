@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
+import logoAsset from "@/assets/ccn-logo-full.png.asset.json";
+import bgAsset from "@/assets/auth-bg.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,17 +59,18 @@ function AuthPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
       {/* Brand side */}
-      <div className="hidden lg:flex flex-col justify-between p-12 bg-sidebar text-sidebar-foreground">
-        <div className="flex items-center gap-3">
-          <img src={logoAsset.url} alt="CCN" className="size-12" width={48} height={48} />
-          <div>
-            <p className="font-bold">Cinema Cities Network</p>
-            <p className="text-[10px] tracking-[0.18em] text-sidebar-muted uppercase">
-              Global Unity Through Storytelling
-            </p>
-          </div>
+      <div
+        className="relative hidden lg:flex flex-col justify-between p-12 bg-sidebar text-sidebar-foreground overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(to right, color-mix(in oklab, var(--sidebar) 88%, transparent), color-mix(in oklab, var(--sidebar) 70%, transparent)), url(${bgAsset.url})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="relative z-10">
+          <img src={logoAsset.url} alt="Cinema Cities Network" className="w-64 object-contain" />
         </div>
-        <div className="max-w-md">
+        <div className="relative z-10 max-w-md">
           <h2 className="text-4xl font-bold leading-tight">
             Connect cities worldwide through the power of film.
           </h2>
@@ -77,7 +79,7 @@ function AuthPage() {
             global partner network.
           </p>
         </div>
-        <p className="text-xs text-sidebar-muted">
+        <p className="relative z-10 text-xs text-sidebar-muted">
           © {new Date().getFullYear()} Cinema Cities Network. Film. Technology. The Human Voice.
         </p>
       </div>
