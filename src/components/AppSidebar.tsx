@@ -62,14 +62,8 @@ export function AppSidebar() {
   return (
     <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col min-h-screen sticky top-0">
       {/* Brand */}
-      <div className="px-6 pt-6 pb-5 flex flex-col items-center text-center border-b border-sidebar-border">
-        <img src={logoAsset.url} alt="Cinema Cities Network" className="w-full max-w-[200px] object-contain" />
-        <p className="mt-3 text-[10px] font-semibold tracking-[0.18em] text-sidebar-foreground/90">
-          GLOBAL UNITY THROUGH STORYTELLING
-        </p>
-        <p className="mt-1 text-[10px] font-semibold tracking-[0.18em] bg-gradient-to-r from-emerald-300 to-sky-300 bg-clip-text text-transparent">
-          FILM. TECHNOLOGY. THE HUMAN VOICE.
-        </p>
+      <div className="px-5 pt-5 pb-4 border-b border-sidebar-border">
+        <img src={logoAsset.url} alt="Cinema Cities Network" className="w-full object-contain" />
       </div>
 
       {/* Location switcher */}
