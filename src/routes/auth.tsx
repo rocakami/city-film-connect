@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
+import logoAsset from "@/assets/ccn-logo-full.png.asset.json";
+import bgAsset from "@/assets/auth-bg.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
