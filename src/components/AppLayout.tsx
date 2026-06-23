@@ -4,7 +4,7 @@ import { AppSidebar } from "./AppSidebar";
 import { useAuth } from "@/lib/store";
 import { useEffect, useState } from "react";
 import logoAsset from "@/assets/ccn-logo-full.png.asset.json";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,15 +43,14 @@ export function AppLayout() {
 
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-16 md:h-20 bg-background border-b border-border flex items-center gap-2 md:gap-4 px-3 md:px-8 sticky top-0 z-10">
-          <SheetTrigger asChild>
-            <button
-              onClick={() => setOpen(true)}
-              className="md:hidden size-10 rounded-full grid place-items-center hover:bg-secondary transition-colors shrink-0"
-              aria-label="Open menu"
-            >
-              <Menu className="size-5" />
-            </button>
-          </SheetTrigger>
+          <button
+            onClick={() => setOpen(true)}
+            className="md:hidden size-10 rounded-full grid place-items-center hover:bg-secondary transition-colors shrink-0"
+            aria-label="Open menu"
+          >
+            <Menu className="size-5" />
+          </button>
+
 
           <img src={logoAsset.url} alt="CCN" className="md:hidden h-8 object-contain" />
 

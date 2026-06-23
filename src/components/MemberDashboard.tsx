@@ -25,19 +25,20 @@ export function MemberDashboard() {
 
   return (
     <>
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             Welcome back, {user.name.split(" ")[0]}! <span aria-hidden>👋</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Here's what's happening with your account today.
           </p>
         </div>
-        <div className="text-xs font-semibold px-3 py-2 rounded-lg bg-card border border-border flex items-center gap-2">
+        <div className="self-start text-xs font-semibold px-3 py-2 rounded-lg bg-card border border-border flex items-center gap-2">
           <Calendar className="size-3.5 text-primary" /> May 30 – Jun 5, 2024
         </div>
       </div>
+
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <StatCard label="My Submissions" value={myFilms.length} caption="Total Submissions"
@@ -135,20 +136,21 @@ export function MemberDashboard() {
       </div>
 
       {/* Volunteer banner */}
-      <div className="bg-slate-900 text-white rounded-2xl p-5 flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <div className="size-12 rounded-xl bg-white/10 grid place-items-center">
+      <div className="bg-slate-900 text-white rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex items-center gap-4 min-w-0">
+          <div className="size-12 rounded-xl bg-white/10 grid place-items-center shrink-0">
             <Megaphone className="size-6" />
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="font-semibold">Volunteer Opportunities Available!</p>
             <p className="text-sm text-white/70">Make a difference by volunteering at upcoming events.</p>
           </div>
         </div>
-        <button className="px-4 py-2 rounded-md bg-white/10 hover:bg-white/20 text-sm font-semibold">
+        <button className="shrink-0 px-4 py-2 rounded-md bg-white/10 hover:bg-white/20 text-sm font-semibold">
           View Opportunities
         </button>
       </div>
+
 
       {/* Bottom row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
