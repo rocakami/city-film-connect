@@ -15,7 +15,8 @@ import {
   BookOpen,
   LogOut,
 } from "lucide-react";
-import logoAsset from "@/assets/ccn-logo-user.png.asset.json";
+import logoAsset from "@/assets/ccn-logo-full.png.asset.json";
+import skylineAsset from "@/assets/ccn-skyline.png.asset.json";
 import { useAuth } from "@/lib/store";
 import { useLocations, usePermissions, type ModuleKey } from "@/lib/data-stores";
 
