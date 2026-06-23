@@ -37,17 +37,18 @@ function AdminDashboard() {
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end sm:justify-between gap-3 mb-6">
+        <div className="min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Welcome back, {user?.name.split(" ")[0]}! Here's what's happening with CCN today.
           </p>
         </div>
-        <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-xs font-semibold">
+        <div className="self-start inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-xs font-semibold">
           <Calendar className="size-3.5 text-primary" /> May 30 – Jun 5, 2024
         </div>
       </div>
+
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">

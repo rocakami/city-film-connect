@@ -60,7 +60,7 @@ export function AppSidebar() {
   const activeLoc = activeLocationId === "all" ? null : getById(activeLocationId);
 
   return (
-    <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col min-h-screen sticky top-0">
+    <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col min-h-screen md:sticky md:top-0">
       {/* Brand */}
       <div className="px-5 pt-5 pb-4 border-b border-sidebar-border">
         <img src={logoAsset.url} alt="Cinema Cities Network" className="w-full object-contain" />
