@@ -127,22 +127,8 @@ export function AppSidebar() {
 
       {/* Promo card */}
       <div className="px-4 pb-3">
-        <div className="relative rounded-xl border border-sidebar-border bg-sidebar-border/30 p-4 overflow-hidden">
-          <p className="text-sm font-semibold leading-snug">
-            Global unity<br />through storytelling.
-          </p>
-          <p className="mt-2 text-xs bg-gradient-to-r from-emerald-300 to-sky-300 bg-clip-text text-transparent font-medium">
-            Film. Technology.<br />The Human Voice.
-          </p>
-          <svg viewBox="0 0 200 60" className="mt-3 w-full h-12 opacity-70" fill="none">
-            <path d="M0 55 L10 40 L20 50 L30 30 L40 45 L55 20 L70 40 L85 15 L100 35 L115 10 L130 30 L145 25 L160 40 L175 18 L190 38 L200 28 L200 60 L0 60 Z" fill="url(#sg)" />
-            <defs>
-              <linearGradient id="sg" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#0c4a6e" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
-          </svg>
+        <div className="relative rounded-xl border border-sidebar-border bg-sidebar-border/30 overflow-hidden">
+          <img src={skylineAsset.url} alt="" className="w-full h-auto object-cover block" />
         </div>
       </div>
 
